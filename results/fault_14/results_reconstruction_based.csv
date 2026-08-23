@@ -1,0 +1,2 @@
+far,fdr,precision,recall,f1,tp,fn,fp,tn,normal_detected,fault_detected,method,fault_num,threshold,scoring_method,confidence_level
+1.3026052104208417,99.949924887331,0.9871414441147379,0.99949924887331,0.9932819109231152,1996,1,26,1970,[0 0 0 ... 0 0 0],[1 1 1 ... 1 1 1],重建质量导向,14,7.922155639778202,reconstruction_based,0.98
