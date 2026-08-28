@@ -2,21 +2,45 @@
 
 # 🏭 FGAN-Industrial-Fault-Detection
 
-### FGAN + KDE industrial process fault detection.
+### Unsupervised industrial fault detection with FBGAN.
 
-Fault detection on the Tennessee Eastman Process (TEP) with FGAN and KDE — 21 fault types, fully visualized.
+A feature-based bidirectional GAN that detects faults in the Tennessee Eastman Process — trained on normal data only.
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Python](https://img.shields.io/badge/Python-3.8+-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![Python](https://img.shields.io/badge/Python-3.9+-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-2.0-EE4C2C?logo=pytorch&logoColor=white)](https://pytorch.org/)
+[![Scikit-learn](https://img.shields.io/badge/Scikit--learn-1.0-F7931E?logo=scikitlearn&logoColor=white)](https://scikit-learn.org/)
 
 </div>
 
 ---
 
-**FGAN-Industrial-Fault-Detection** applies **FGAN** (with **KDE**) to industrial process fault detection on the **Tennessee Eastman Process (TEP)** benchmark — covering **21 fault types** with full visualization.
+**FGAN-Industrial-Fault-Detection** implements **FBGAN** — a feature-based bidirectional generative adversarial network — for **unsupervised industrial fault detection** on the **Tennessee Eastman Process** dataset. It needs only normal-operation data for training, yet achieves **1.30% false alarm rate** and **76.2% average detection rate** across 21 fault types (12 detected at 100%).
 
 > [!NOTE]
-> 中文项目：FGAN + KDE 工业过程故障检测——田纳西伊斯曼过程（TEP），21 种故障，完整可视化。
+> 中文项目：基于双向生成对抗网络（FBGAN）的无监督工业过程故障检测——TEP 数据集，仅用正常数据训练，误报率 1.30%。
+
+---
+
+## Why FBGAN
+
+| Method | FAR | Avg. FDR | Notes |
+|--------|-----|----------|-------|
+| **FBGAN** | **1.30%** | **76.2%** | unsupervised, low false alarm, high detection |
+| Autoencoder | 3–6% | 70–80% | nonlinear but high false alarms |
+| PCA / DPCA | 2–5% | 60–70% | simple but linear-assumption bound |
+
+**Key idea** — a bidirectional encoder/decoder maps data to a compact 13-dim feature space and back, with **two discriminators** (data-space and feature-space) and a **cycle-consistency loss**. Reconstruction errors feed an adaptive KDE-based threshold, so no fault labels are needed.
+
+---
+
+## Features
+
+- **Unsupervised** — trains on normal data only; no fault labels required.
+- **Bidirectional GAN** — dual discriminators + cycle-consistency for robust reconstruction.
+- **Adaptive threshold** — KDE-based score threshold auto-adapts to the data distribution.
+- **21-fault coverage** — TEP faults d01–d21 with per-fault test results and visualizations.
+- **Deployable** — pretrained models (`models/*.pth`) and per-fault result outputs included.
 
 ---
 
@@ -28,19 +52,11 @@ cd FGAN-Industrial-Fault-Detection
 
 pip install -r requirements.txt
 
-# run the detection pipeline (see README / scripts in repo)
-python src/main.py
+# run detection on the TEP dataset
+python src/fault_detection1.py
 ```
 
-The TEP dataset (`d00_train.csv`, `d00_test.csv` … `d20_test.csv`) ships in `data/`.
-
----
-
-## Features
-
-- **FGAN + KDE** — generative + kernel-density fault detection.
-- **TEP benchmark** — standard 21-fault Tennessee Eastman data.
-- **Full visualization** — detection results and distributions.
+Pretrained weights live in `models/` (`complete_model.pth`, checkpoints, `scaler.pkl`); per-fault scores and plots are in `results/fault_XX/`.
 
 ---
 
@@ -48,9 +64,15 @@ The TEP dataset (`d00_train.csv`, `d00_test.csv` … `d20_test.csv`) ships in `d
 
 ```
 FGAN-Industrial-Fault-Detection/
-├── data/                 # TEP train/test CSVs (d00–d20)
-├── src/                  # detection pipeline
-└── README.md
+├── src/
+│   ├── FBGAN.py              # FBGAN model
+│   ├── FENETFIL.py           # feature net / filtering
+│   ├── fault_detection1.py   # detection entry
+│   └── config.py             # config
+├── models/                   # pretrained weights + scaler
+├── data/                     # TEP normal + fault CSVs (d00–d21)
+├── results/                  # per-fault scores, plots, summaries
+└── docs/                     # RESULTS, threshold explanation
 ```
 
 ---
