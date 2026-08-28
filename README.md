@@ -77,6 +77,15 @@ FGAN-Industrial-Fault-Detection/
 
 ---
 
+
+## Results
+
+<div align="center">
+  <img src="results/analysis/score_distributions.png" alt="Anomaly score distribution" width="70%"/>
+  <img src="results/analysis/separation_comparison.png" alt="Fault separation comparison" width="70%"/>
+</div>
+
+---
 ## License
 
 MIT — free to use, modify and distribute.
