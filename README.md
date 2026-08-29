@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🏭 FGAN-Industrial-Fault-Detection
+# 工业故障检测 | FGAN-Industrial-Fault-Detection
 
 ### Unsupervised industrial fault detection with FBGAN.
 
